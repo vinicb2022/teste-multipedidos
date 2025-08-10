@@ -1,0 +1,45 @@
+1. Cite duas situações reais (do seu histórico ou exemplos fictícios) onde boas
+práticas de código (ex: Clean Code, SOLID) ajudaram na manutenção ou evolução
+do sistema.
+
+Resposta:
+
+- Uma das práticas que considero mais importantes é o princípio da Responsabilidade Única do SOLID. Em um projeto que trabalhei, 
+havia uma função gigante responsável por enviar documentos para a Procuradoria-Geral do Município (PGM), que lidava com mais de 15 tipos 
+diferentes de documentos. Sempre que era necessário alterar ou adicionar um novo tipo de documento, essa função precisava ser modificada, 
+o que tornava o código difícil de manter e causava alto risco de regressão, pois qualquer mudança exigia testes extensos em toda a 
+funcionalidade para garantir que nada quebrou. Para resolver isso, realizei uma refatoração para separar as responsabilidades, 
+criando funções ou classes específicas para cada tipo de documento. Assim, cada parte do código passou a cuidar de uma única tarefa, 
+facilitando a manutenção e a adição de novos documentos, além de reduzir o risco de impactos indesejados em outras partes que não foram alteradas.
+
+- No mesmo projeto tinha uma área que envolvia o cálculo do valor do IPTU, as regras variavam bastante conforme o tamanho e localização do imóvel 
+onde ele estava localizado. Inicialmente, toda a lógica de cálculo estava concentrada em uma única classe que tratava todos os casos, 
+e sempre que surgia uma nova regra para uma área ou região diferente, precisávamos modificar essa classe, o que aumentava o risco de 
+erros e quebrava funcionalidades já testadas. Para resolver, criei uma interface para cálculo de IPTU e implementei classes específicas 
+para cada tipo de regra, como cálculo por área residencial, comercial, rural. Assim, para adicionar uma nova regra, bastava criar uma nova 
+classe que implementava a interface, sem alterar o código existente. Essa abordagem facilitou a manutenção e evolução do sistema, 
+e tornou o código fácil de testar.
+
+
+2. Descreva um risco comum de se ignorar princípios como SOLID em sistemas que
+evoluem ao longo do tempo.
+
+Resposta: 
+
+- Acredito que ignorar princípios como SOLID pode comprometer a escalabilidade do projeto, tornando o código rígido e difícil de modificar. 
+Deixando o sistema pouco flexível, onde pequenas mudanças podem causar efeitos colaterais inesperados, dificultando a manutenção, 
+aumentando o tempo para implementar novas funcionalidades e elevando o risco de introduzir bugs.
+
+
+3. Liste duas estratégias para garantir que o código legado da empresa siga evoluindo sem se tornar gargalo novamente
+ 
+Resposta:
+
+- Acredito que um estratégia seria adotar um arquitetura com camadas desacopladas e responsabilidades bem definidas. Por exemplo no laravel: 
+separar os controllers para serem responsáveis apenas por receber requisições e retornar respostas, sem conter lógica de negócio, os services 
+para  concentrar as regras de negócio e validações, garantindo que a lógica fique isolada e os repositories para cuidarem do acesso e 
+manipulação dos dados.
+
+Outra estratégia, agora pensando mais na parte do front com Angular, seria realizar uma migração gradual para versões mais recentes, adotando 
+uma arquitetura modular baseada em componentes e serviços, utilizando TypeScript com tipagem forte e interfaces para manter o código 
+robusto e fácil de manter.

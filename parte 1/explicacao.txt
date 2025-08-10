@@ -1,0 +1,17 @@
+Organizei o código em três camadas:
+
+- Model: representando a tabela data usando Eloquent, facilitando o trabalho com os dados do banco de forma orientada a objetos, incluindo 
+o cast dos campos.
+
+- Service: contendo a lógica de negócio, realizando a consulta para calcular o total ajustado dos últimos 10 anos. Usando o Eloquent para 
+construir a query, com uma expressão raw para multiplicar o valor, aproveitando a soma do banco.
+
+- Controller: sendo responsável pela requisição, delegando a tarefa para o Service e retornando a resposta JSON ao frontend.
+
+Melhorias de performance: 
+A operação de soma é executada diretamente no banco evitando a transferência e processamento de dados desnecessários no backend.
+Ao filtrar pela coluna date a consulta é mais rápida mesmo com grande volume de registros, pois o banco otimiza o acesso aos dados
+
+Escalabilidade e manutenção:
+A arquitetura em camadas separa responsabilidades, facilitando testes e futuras modificações. O uso do Eloquent ORM para consultas garante 
+código limpo para adaptações no banco. Concentrar a lógica no Service permite escalabilidade e melhora a organização do projeto para equipes maiores.
