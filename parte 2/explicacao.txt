@@ -1,0 +1,23 @@
+Pra resolver o problema da requisição longa, montei um modelo usando WebSockets. Em vez de o frontend ficar toda hora perguntando pro 
+servidor se o processo finalizou o WebSocket cria um canal de comunicação direto. Assim, quando o backend termina o processo, ele mesmo 
+avisa o frontend na hora deixando a experiencia mais rápida, e sem tráfego desnecessário.
+
+Dividi o backend em 3 arquivos cada um com sua responsabilidade
+- Controller (AnalysisController.php): Recebe a requisição, valida e já joga para o job. Só devolve pro frontend um analysisId pra ele 
+saber qual análise está acompanhando.
+
+- Job (ProcessAnalysis.php): Roda o processo em segundo plano pra não travar o sistema. Quando termina dispara o Evento com o status e os dados.
+
+- Evento (AnalysisStatus.php): Carrega o status, o ID da análise e os resultados. Ele é configurado pra ser transmitido via 
+WebSocket num canal privado, assim só o usuário certo recebe a mensagem.
+
+Já no frontend:
+Começa enviando a requisição pro Controller. Quando recebe o analysisId, já mostra na tela que tá “Processando...”. Depois, fica só escutando, 
+inscrito no canal privado do usuário via Laravel Echo. Não precisa mais chamar o servidor. Quando chega a notificação pelo WebSocket, 
+ele confere se o analysisId bate com o que tá monitorando e se bater troca o status, tudo em tempo real.
+
+*Tive que resolver algo parecido em um projeto anterior, onde usei WebSocket para envio de notificações em tempo real. Na época, a ideia 
+não tinha nada a ver com requisição lenta: era para que, ao enviar uma notificação, o usuário recebesse instantaneamente, com som e ícone 
+personalizado na plataforma. Nesse projeto o backend era em AdonisJS, e eu nunca tinha feito algo parecido no Laravel. Para este caso, 
+pesquisei e descobri o recurso de Laravel Broadcast, que permite implementar essa comunicação em tempo real de forma bem parecida. 
+Peguei a mesma lógica que usei antes e adaptei para lidar com requisições demoradas, pois acredito que faz sentido.
